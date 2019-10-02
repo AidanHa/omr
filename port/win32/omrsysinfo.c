@@ -90,6 +90,40 @@ omrsysinfo_get_CPU_architecture(struct OMRPortLibrary *portLibrary)
 #endif
 }
 
+intptr_t
+omrsysinfo_get_processor_description(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc)
+{
+	intptr_t rc = -1;
+	Trc_PRT_sysinfo_get_processor_description_Entered(desc);
+	
+	if (NULL != desc) {
+		memset(desc, 0, sizeof(OMRProcessorDesc));
+		rc = getX86Description(portLibrary, desc);
+	}
+	
+	Trc_PRT_sysinfo_get_processor_description_Exit(rc);
+	return rc;
+}
+
+BOOLEAN
+omrsysinfo_processor_has_feature(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc, uint32_t feature)
+{
+	BOOLEAN rc = FALSE;
+	Trc_PRT_sysinfo_processor_has_feature_Entered(desc, feature);
+
+	if ((NULL != desc)
+	&& (feature < (OMR_SYSINFO_FEATURES_SIZE * 32))
+	) {
+		uint32_t featureIndex = feature / 32;
+		uint32_t featureShift = feature % 32;
+
+		rc = OMR_ARE_ALL_BITS_SET(desc->features[featureIndex], 1 << featureShift);
+	}
+
+	Trc_PRT_sysinfo_processor_has_feature_Exit((uintptr_t)rc);
+	return rc;
+}
+
 #define ENVVAR_VALUE_BUFFER_LENGTH 512
 #define ENVVAR_NAME_BUFFER_LENGTH 128
 intptr_t

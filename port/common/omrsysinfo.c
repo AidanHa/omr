@@ -90,6 +90,35 @@ omrsysinfo_get_CPU_architecture(struct OMRPortLibrary *portLibrary)
 #endif
 }
 /**
+ * Determine CPU type and features.
+ *
+ * @param[in] portLibrary The port library.
+ * @param[out] desc pointer to the struct that will contain the CPU type and features.
+ *              - desc will still be initialized if there is a failure.
+ *
+ * @return 0 on success, -1 on failure
+ */
+intptr_t
+omrsysinfo_get_processor_description(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc)
+{
+	return -1;
+}
+
+/**
+ * Determine if a CPU feature is present.
+ *
+ * @param[in] portLibrary The port library.
+ * @param[in] desc The struct that will contain the CPU type and features.
+ * @param[in] feature The feature to check (see j9port.h for list of features J9PORT_{PPC,S390,PPC}_FEATURE_*)
+ *
+ * @return TRUE if feature is present, FALSE otherwise.
+ */
+BOOLEAN
+omrsysinfo_processor_has_feature(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc, uint32_t feature)
+{
+	return FALSE;
+}
+/**
  * Query the operating system for environment variables.
  *
  * Obtain the value of the environment variable specified by envVar from the operating system
