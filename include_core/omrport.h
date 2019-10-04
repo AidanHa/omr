@@ -1281,12 +1281,12 @@ typedef struct OMRProcessorDesc {
 #define OMRPORT_S390_FEATURE_MSA_EXTENSION3                      11 /* STFLE bit 76 */
 #define OMRPORT_S390_FEATURE_MSA_EXTENSION4                      12 /* STFLE bit 77 */
 
-#define OMR_S390_FEATURE_COMPARE_AND_SWAP_AND_STORE          32 + 0  /* STFLE bit 32 */
-#define OMR_S390_FEATURE_COMPARE_AND_SWAP_AND_STORE2         32 + 1  /* STFLE bit 33 */
-#define OMR_S390_FEATURE_EXECUTE_EXTENSIONS                  32 + 3  /* STFLE bit 35 */
-#define OMR_S390_FEATURE_FPE                                 32 + 9  /* STFLE bit 41 */
+#define OMRPORT_S390_FEATURE_COMPARE_AND_SWAP_AND_STORE          32 + 0  /* STFLE bit 32 */
+#define OMRPORT_S390_FEATURE_COMPARE_AND_SWAP_AND_STORE2         32 + 1  /* STFLE bit 33 */
+#define OMRPORT_S390_FEATURE_EXECUTE_EXTENSIONS                  32 + 3  /* STFLE bit 35 */
+#define OMRPORT_S390_FEATURE_FPE                                 32 + 9  /* STFLE bit 41 */
 
-#define OMR_S390_FEATURE_RI            64 + 0 /* STFLE bit 64 */
+#define OMRPORT_S390_FEATURE_RI            64 + 0 /* STFLE bit 64 */
 
 /* z990 facilities */
 
@@ -1549,9 +1549,9 @@ typedef struct OMRPortLibrary {
 	/** see @ref omrsysinfo.c::omrsysinfo_get_CPU_architecture "omrsysinfo_get_CPU_architecture"*/
 	const char *(*sysinfo_get_CPU_architecture)(struct OMRPortLibrary *portLibrary) ;
 	/** see @ref omrsysinfo.c::omrsysinfo_get_processor_description "omrsysinfo_get_processor_description"*/
-	intptr_t  ( *sysinfo_get_processor_description)(struct J9PortLibrary *portLibrary, OMRProcessorDesc *desc) ;
+	intptr_t  ( *sysinfo_get_processor_description)(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc) ;
 	/** see @ref omrsysinfo.c::omrsysinfo_processor_has_feature "omrsysinfo_processor_has_feature"*/
-	BOOLEAN  ( *sysinfo_processor_has_feature)(struct J9PortLibrary *portLibrary, OMRProcessorDesc *desc, uint32_t feature) ;
+	BOOLEAN  ( *sysinfo_processor_has_feature)(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc, uint32_t feature) ;
 	/** see @ref omrsysinfo.c::omrsysinfo_get_OS_type "omrsysinfo_get_OS_type"*/
 	const char *(*sysinfo_get_OS_type)(struct OMRPortLibrary *portLibrary) ;
 	/** see @ref omrsysinfo.c::omrsysinfo_get_executable_name "omrsysinfo_get_executable_name"*/

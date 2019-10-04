@@ -93,4 +93,6 @@ typedef struct OMRPortPlatformGlobals {
 #define PPG_si_executableName (portLibrary->portGlobals->platformGlobals.si_executableName)
 #define PPG_ipt_ttoken (portLibrary->portGlobals->platformGlobals.iptTtoken)
 
+#define PPG_stfleCache (portLibrary->portGlobals->platformGlobals.stfleCache)
+
 #endif /* omrportpg_h */

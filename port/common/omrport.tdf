@@ -1096,3 +1096,6 @@ TraceExit-Exception=Trc_PRT_omrsig_ambiguous_signal_flag_failed_exiting Group=si
 
 TraceEntry=Trc_PRT_sysinfo_get_processor_description_Entered Group=j9sysinfo Overhead=1 Level=5 NoEnv Template="sysinfo_get_processor_description: desc = %p"
 TraceExit=Trc_PRT_sysinfo_get_processor_description_Exit Group=j9sysinfo Overhead=1 Level=5 NoEnv Template="sysinfo_get_processor_description: returning with %zd"
+
+TraceEntry=Trc_PRT_sysinfo_processor_has_feature_Entered Group=j9sysinfo Overhead=1 Level=5 NoEnv Template="sysinfo_processor_has_feature: desc = %p, feature = %d"
+TraceExit=Trc_PRT_sysinfo_processor_has_feature_Exit Group=j9sysinfo Overhead=1 Level=5 NoEnv Template="sysinfo_processor_has_feature: returning with %zu."

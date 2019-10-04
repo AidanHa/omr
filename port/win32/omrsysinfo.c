@@ -44,6 +44,7 @@
 #include "omrportpg.h"
 #include "omrportptb.h"
 #include "ut_omrport.h"
+#include "omrsysinfo_helpers.h"
 
 static int32_t copyEnvToBuffer(struct OMRPortLibrary *portLibrary, void *args);
 
