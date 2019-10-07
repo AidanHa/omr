@@ -52,6 +52,12 @@ typedef struct J9PortNodeMask {
 } J9PortNodeMask;
 #endif
 
+typedef struct STFLEFacilities {
+	uint64_t dw1;
+	uint64_t dw2;
+	uint64_t dw3;
+} STFLEFacilities;
+
 typedef struct OMRPortPlatformGlobals {
 	uintptr_t numa_platform_supports_numa;
 	uintptr_t numa_platform_interleave_memory;

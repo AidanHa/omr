@@ -1221,11 +1221,11 @@ typedef enum OMRProcessorArchitecture {
 /* Holds processor type and features used with j9sysinfo_get_processor_description
  * and j9sysinfo_processor_has_feature
  */
-#define OMR_SYSINFO_FEATURES_SIZE 5
+#define OMRPORT_SYSINFO_FEATURES_SIZE 5
 typedef struct OMRProcessorDesc {
 	OMRProcessorArchitecture processor;
 	OMRProcessorArchitecture physicalProcessor;
-	uint32_t features[OMR_SYSINFO_FEATURES_SIZE];
+	uint32_t features[OMRPORT_SYSINFO_FEATURES_SIZE];
 } OMRProcessorDesc;
 
 /* PowerPC features

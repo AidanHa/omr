@@ -559,7 +559,7 @@ omrsysinfo_get_processor_description(struct OMRPortLibrary *portLibrary, OMRProc
 	Trc_PRT_sysinfo_get_processor_description_Entered(desc);
 
 	if (NULL != desc) {
-		memset(desc, 0, sizeof(J9ProcessorDesc));
+		memset(desc, 0, sizeof(OMRProcessorDesc));
 
 #if (defined(J9X86) || defined(J9HAMMER))
 		rc = getX86Description(portLibrary, desc);
@@ -577,7 +577,7 @@ omrsysinfo_get_processor_description(struct OMRPortLibrary *portLibrary, OMRProc
 }
 
 BOOLEAN
-omrsysinfo_processor_has_feature(struct J9PortLibrary *portLibrary, J9ProcessorDesc *desc, uint32_t feature)
+omrsysinfo_processor_has_feature(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc, uint32_t feature)
 {
 	BOOLEAN rc = FALSE;
 	Trc_PRT_sysinfo_processor_has_feature_Entered(desc, feature);
@@ -597,7 +597,7 @@ omrsysinfo_processor_has_feature(struct J9PortLibrary *portLibrary, J9ProcessorD
 #endif
 
 	if ((NULL != desc)
-	&& (feature < (J9PORT_SYSINFO_FEATURES_SIZE * 32))
+	&& (feature < (OMRPORT_SYSINFO_FEATURES_SIZE * 32))
 	) {
 		uint32_t featureIndex = feature / 32;
 		uint32_t featureShift = feature % 32;
@@ -609,6 +609,7 @@ omrsysinfo_processor_has_feature(struct J9PortLibrary *portLibrary, J9ProcessorD
 	return rc;
 }
 
+#if (defined(LINUXPPC) || defined(AIXPPC))
 /**
  * @internal
  * Helper to set appropriate feature field in a OMRProcessorDesc struct.
@@ -629,7 +630,7 @@ setFeature(OMRProcessorDesc *desc, uint32_t feature)
 		desc->features[featureIndex] = (desc->features[featureIndex] | (1 << (featureShift)));
 	}
 }
-
+#endif /* (defined(LINUXPPC) || defined(AIXPPC)) */
 
 #if defined(LINUXPPC)
 /**
@@ -848,7 +849,7 @@ getAIXPPCDescription(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc)
  * @return TRUE if bit is 1, FALSE otherwise.
  */
 static BOOLEAN
-testSTFLE(struct J9PortLibrary *portLibrary, uint64_t stfleBit)
+testSTFLE(struct OMRPortLibrary *portLibrary, uint64_t stfleBit)
 {
 	BOOLEAN rc = FALSE;
 
