@@ -58,6 +58,11 @@ typedef struct STFLEFacilities {
 	uint64_t dw3;
 } STFLEFacilities;
 
+typedef struct OMRSTFLECache {
+	uintptr_t lastDoubleWord;
+	STFLEFacilities facilities;
+} OMRSTFLECache;
+
 typedef struct OMRPortPlatformGlobals {
 	uintptr_t numa_platform_supports_numa;
 	uintptr_t numa_platform_interleave_memory;
@@ -96,6 +101,7 @@ typedef struct OMRPortPlatformGlobals {
 	OMRCgroupEntry *cgroupEntryList; /**< head of the circular linked list, each element contains information about cgroup of the process for a subsystem */
 	BOOLEAN syscallNotAllowed; /**< Assigned True if the mempolicy syscall is failed due to security opts (Can be seen in case of docker) */
 #endif /* defined(LINUX) */
+	OMRSTFLECache stfleCache;
 } OMRPortPlatformGlobals;
 
 
@@ -143,6 +149,8 @@ typedef struct OMRPortPlatformGlobals {
 #define PPG_cgroupEntryList (portLibrary->portGlobals->platformGlobals.cgroupEntryList)
 #define PPG_numaSyscallNotAllowed (portLibrary->portGlobals->platformGlobals.syscallNotAllowed)
 #endif /* defined(LINUX) */
+
+#define PPG_stfleCache (portLibrary->portGlobals->platformGlobals.stfleCache)
 
 #endif /* omrportpg_h */
 

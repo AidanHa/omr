@@ -48,6 +48,17 @@
 #define TTOKEN_BUF_SZ                   16
 #endif /* defined(OMR_ENV_DATA64) */
 
+typedef struct STFLEFacilities {
+	uint64_t dw1;
+	uint64_t dw2;
+	uint64_t dw3;
+} STFLEFacilities;
+
+typedef struct OMRSTFLECache {
+	uintptr_t lastDoubleWord;
+	STFLEFacilities facilities;
+} OMRSTFLECache;
+
 typedef struct OMRPortPlatformGlobals {
 	char *si_osType;
 	char *si_osVersion;
@@ -70,6 +81,7 @@ typedef struct OMRPortPlatformGlobals {
 	char *si_executableName;
 #if defined(OMR_ENV_DATA64)
 	char iptTtoken[TTOKEN_BUF_SZ];
+	OMRSTFLECache stfleCache;
 #endif /* defined(OMR_ENV_DATA64) */
 } OMRPortPlatformGlobals;
 

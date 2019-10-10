@@ -72,6 +72,7 @@
 #include <nl_types.h>
 #include <langinfo.h>
 
+
 #if defined(J9ZOS390)
 #include "omrsimap.h"
 #endif /* defined(J9ZOS390) */
@@ -79,11 +80,12 @@
 #if (defined(LINUXPPC) || (defined(S390) && defined(LINUX) && !defined(J9ZTPF)))
 #include "auxv.h"
 #include <strings.h>
-#endif /* (defined(LINUXPPC) || (defined(S390) && defined(LINUX) && !defined(J9ZTPF))) */
+#endif /* defined(LINUXPPC) || (defined(S390) && defined(LINUX) && !defined(J9ZTPF)) */
 
-#if (defined(S390) || defined(J9ZOS390))
+#if (defined(S390))
+#include "omrportpriv.h"
 #include "omrportpg.h"
-#endif /* (defined(S390) || defined(J9ZOS390) */
+#endif /* defined(S390) */
 
 #if defined(AIXPPC)
 #include <fcntl.h>
@@ -193,14 +195,21 @@ static uintptr_t copyEnvToBufferSignalHandler(struct OMRPortLibrary *portLib, ui
 
 static void setPortableError(OMRPortLibrary *portLibrary, const char *funcName, int32_t portlibErrno, int systemErrno);
 
+#if (defined(LINUXPPC) || defined(AIXPPC))
+static OMRProcessorArchitecture mapPPCProcessor(const char *processorName);
+
+#endif /* (defined(LINUXPPC) || defined(AIXPPC)) */
+
+#if (defined(LINUXPPC) || defined(AIXPPC) || defined(S390) || defined(J9ZOS390))
+static void setFeature(OMRProcessorDesc *desc, uint32_t feature);
+#endif /* defined(LINUXPPC) || defined(AIXPPC) || defined(S390) || defined(J9ZOS390) */
+
 #if defined(LINUXPPC)
 static intptr_t getLinuxPPCDescription(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc);
-static OMRProcessorArchitecture mapPPCProcessor(const char *processorName);
 #endif /* defined(LINUXPPC) */
 
 #if defined(AIXPPC)
 static intptr_t getAIXPPCDescription(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc);
-static void setFeature(OMRProcessorDesc *desc, uint32_t feature);
 #endif /* defined(AIXPPC) */
 
 #if (defined(S390) || defined(J9ZOS390) || defined(J9ZTPF))
@@ -609,7 +618,7 @@ omrsysinfo_processor_has_feature(struct OMRPortLibrary *portLibrary, OMRProcesso
 	return rc;
 }
 
-#if (defined(LINUXPPC) || defined(AIXPPC))
+#if (defined(LINUXPPC) || defined(AIXPPC) || defined(S390) || defined(J9ZOS390))
 /**
  * @internal
  * Helper to set appropriate feature field in a OMRProcessorDesc struct.
@@ -630,7 +639,7 @@ setFeature(OMRProcessorDesc *desc, uint32_t feature)
 		desc->features[featureIndex] = (desc->features[featureIndex] | (1 << (featureShift)));
 	}
 }
-#endif /* (defined(LINUXPPC) || defined(AIXPPC)) */
+#endif /* defined(LINUXPPC) || defined(AIXPPC) || defined(S390) || defined(J9ZOS390) */
 
 #if defined(LINUXPPC)
 /**
@@ -862,11 +871,11 @@ testSTFLE(struct OMRPortLibrary *portLibrary, uint64_t stfleBit)
 	}
 
 	if (stfleBit < 64 && *stfleRead >= 0) {
-		rc = (0 != (mem->dw1 & ((uint64_t(1)) << (63 - stfleBit))));
+		rc = (0 != (mem->dw1 & (((uint64_t)1) << (63 - stfleBit))));
 	} else if (stfleBit < 128 && *stfleRead >= 1) {
-		rc = (0 != (mem->dw2 & ((uint64_t(1)) << (127 - stfleBit))));
+		rc = (0 != (mem->dw2 & (((uint64_t)1) << (127 - stfleBit))));
 	} else if (stfleBit < 192 && *stfleRead >= 2) {
-		rc = (0 != (mem->dw3 & ((uint64_t(1)) << (191 - stfleBit))));
+		rc = (0 != (mem->dw3 & (((uint64_t)1) << (191 - stfleBit))));
 	}
 
 	return rc;
@@ -999,7 +1008,7 @@ getS390zOS_supportsGuardedStorageFacility(void)
  * @return 0 on success, -1 on failure
  */
 static intptr_t
-getS390Description(struct J9PortLibrary *portLibrary, J9ProcessorDesc *desc)
+getS390Description(struct OMRPortLibrary *portLibrary, OMRProcessorDesc *desc)
 {
 /* Check hardware and OS (z/OS only) support for GS (guarded storage), RI (runtime instrumentation) and TE (transactional memory) */
 #if defined(J9ZOS390)
@@ -2937,6 +2946,9 @@ omrsysinfo_shutdown(struct OMRPortLibrary *portLibrary)
 			cgroupEntryListMonitor = NULL;
 		}
 #endif /* defined(LINUX) */
+#if (defined(S390) || defined(J9ZOS390))
+		PPG_stfleCache.lastDoubleWord = -1;
+#endif
 	}
 }
 
@@ -2966,6 +2978,11 @@ omrsysinfo_startup(struct OMRPortLibrary *portLibrary)
 	isRunningInContainer(portLibrary, &PPG_isRunningInContainer);
 #endif /* defined(LINUX) */
 	return 0;
+
+#if (defined(S390) || defined(J9ZOS390))
+	PPG_stfleCache.lastDoubleWord = -1;
+#endif
+
 }
 
 intptr_t
