@@ -21,7 +21,7 @@
 
 #ifndef OMR_CPU_INCL
 #define OMR_CPU_INCL
-
+#include "omrport.h"
 /*
  * The following #define and typedef must appear before any #includes in this file
  */
@@ -146,6 +146,8 @@ private:
    TR::Endianness _endianness;
    TR::MajorArchitecture _majorArch;
    TR::MinorArchitecture _minorArch;
+   OMRPortLibrary *_portLib;
+   OMRProcessorDesc _desc;
    };
 }
 

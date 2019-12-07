@@ -87,4 +87,7 @@ OMR::CPU::initializeByHostQuery()
    _majorArch = TR::arch_unknown;
 #endif
 
+   OMRPORT_ACCESS_FROM_OMRPORT(_portLib);
+   omrsysinfo_get_processor_description(&_desc);
+
    }

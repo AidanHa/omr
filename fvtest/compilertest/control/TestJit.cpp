@@ -162,6 +162,7 @@ initializeTestJit(TR_RuntimeHelper *helperIDs, void **helperAddresses, int32_t n
       }
 
    TR::Compiler->initialize();
+   printf("Start of test AYAYAYA %d\n",(TR::Compiler->target.cpu.id() != TR_PPCp6));
 
    // --------------------------------------------------------------------------
    static TestCompiler::FrontEnd fe;
